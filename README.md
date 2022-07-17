@@ -1,20 +1,17 @@
 # Home Library Service
 
-## Prerequisites
-
-- Git - [Download & Install Git](https://git-scm.com/downloads).
-- Node.js - [Download & Install Node.js](https://nodejs.org/en/download/) and the npm package manager.
-
 ## Downloading
 
 ```
-git clone {repository URL}
+git clone https://github.com/oakov/nodejs2022Q2-service
 ```
 
 ## Installing NPM modules
 
 ```
-npm install
+cd nodejs2022Q2-service
+git checkout dev
+npm i
 ```
 
 ## Running application
@@ -37,7 +34,7 @@ To run all tests without authorization
 npm run test
 ```
 
-To run only one of all test suites
+<!-- To run only one of all test suites
 
 ```
 npm run test -- <path to suite>
@@ -69,4 +66,4 @@ npm run format
 
 Press <kbd>F5</kbd> to debug.
 
-For more information, visit: https://code.visualstudio.com/docs/editor/debugging
+For more information, visit: https://code.visualstudio.com/docs/editor/debugging -->
