@@ -33,7 +33,7 @@ export class ArtistService {
 
   async getById(id: string): Promise<IArtist> {
     const artist = this.artists.find((artist) => id === artist.id);
-    if (artist) throw new NotFoundException();
+    if (!artist) throw new NotFoundException();
     return artist;
   }
 
