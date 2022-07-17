@@ -44,7 +44,7 @@ export class UserController {
   @Put(':id')
   update(
     @Body() updatePasswordDto: UpdatePasswordDto,
-    @Param('id', new ParseUUIDPipe()) id: string,
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
   ): Promise<Omit<IUser, 'password'>> {
     return this.usersService.update(id, updatePasswordDto);
   }

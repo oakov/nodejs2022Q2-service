@@ -9,12 +9,16 @@ import { IAlbum } from './album.interface';
 import { CreateAlbumDto } from './dto/album.create.dto';
 import { UpdateAlbumDto } from './dto/album.update.dto';
 import { v4 as uuidv4 } from 'uuid';
+import { FavoritesService } from '../favorites/favorites.service';
 
 @Injectable()
 export class AlbumService {
   constructor(
     @Inject(forwardRef(() => TrackService))
-    private readonly tracksService: TrackService, // favorites
+    private readonly tracksService: TrackService,
+
+    @Inject(forwardRef(() => FavoritesService))
+    private readonly favoritesService: FavoritesService,
   ) {}
 
   private albums: IAlbum[] = [];
@@ -42,8 +46,8 @@ export class AlbumService {
     const albumIndex = this.albums.findIndex((album) => id === album.id);
     if (albumIndex != -1) {
       this.albums.splice(albumIndex, 1);
-      await this.tracksService.removeAlbums(id);
-      //favorites
+      await this.tracksService.removeAlbum(id);
+      await this.favoritesService.removeAlbum(id);
       return;
     }
     throw new NotFoundException();

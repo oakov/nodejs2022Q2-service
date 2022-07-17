@@ -40,9 +40,9 @@ export class UserService {
   }
 
   async remove(id: string): Promise<IUser> {
-    const user = this.users.find((user) => id === user.id);
-    if (user) {
-      this.users = this.users.filter((user) => user.id !== id);
+    const userIndex = this.users.findIndex((user) => id === user.id);
+    if (userIndex != -1) {
+      this.users.splice(userIndex, 1);
       return;
     }
     throw new NotFoundException();
@@ -60,7 +60,10 @@ export class UserService {
       this.users[userIndex].password = userDto.newPassword;
       this.users[userIndex].version += 1;
       this.users[userIndex].updatedAt = Date.now();
-      return this.users[userIndex];
+
+      const responceUser: IUser = { ...this.users[userIndex] };
+      delete responceUser.password;
+      return responceUser;
     }
     throw new NotFoundException();
   }

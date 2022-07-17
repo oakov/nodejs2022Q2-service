@@ -1,12 +1,21 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateTrackDto } from './dto/track.create.dto';
 import { UpdateTrackDto } from './dto/track.update.dto';
 import { ITrack } from './track.interface';
 import { v4 as uuidv4 } from 'uuid';
+import { FavoritesService } from '../favorites/favorites.service';
 
 @Injectable()
 export class TrackService {
-  // favorite
+  constructor(
+    @Inject(forwardRef(() => FavoritesService))
+    private readonly favoritesService: FavoritesService,
+  ) {}
 
   private tracks: ITrack[] = [];
 
@@ -33,7 +42,7 @@ export class TrackService {
     const trackIndex = this.tracks.findIndex((track) => id === track.id);
     if (trackIndex != -1) {
       this.tracks.splice(trackIndex, 1);
-      // favorite
+      await this.favoritesService.removeTrack(id);
       return;
     }
     throw new NotFoundException();
@@ -58,7 +67,7 @@ export class TrackService {
     return;
   }
 
-  async removeAlbums(id: string): Promise<void> {
+  async removeAlbum(id: string): Promise<void> {
     this.tracks = this.tracks.map((track) =>
       track.albumId === id ? { ...track, albumId: null } : track,
     );
