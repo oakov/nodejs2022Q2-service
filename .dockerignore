@@ -1,0 +1,6 @@
+.git
+.gitignore
+.prettierrc
+.eslintrc.js
+node_modules
+dist
