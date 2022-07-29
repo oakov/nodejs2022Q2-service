@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsBoolean } from 'class-validator';
+import { IsNotEmpty, IsString, IsBoolean } from '@nestjs/class-validator';
 
 export class UpdateArtistDto {
   @IsNotEmpty()

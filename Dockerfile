@@ -1,8 +1,10 @@
 FROM node:16-alpine
 
-COPY package.json ./
+WORKDIR /app
 
-RUN npm install && npm cache clean --force
+COPY package*.json ./
+
+RUN npm ci && npm cache clean --force
 
 COPY . .
 

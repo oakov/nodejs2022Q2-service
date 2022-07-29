@@ -4,3 +4,5 @@
 .eslintrc.js
 node_modules
 dist
+Dockerfile
+.dockerignore
