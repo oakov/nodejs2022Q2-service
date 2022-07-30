@@ -2,7 +2,7 @@ services:
   app:
     container_name: nodejs2022Q2-service-app
     build: .
-    image: oakov/nodejs2022q2-service-app
+    image: oakov/nodejs2022q2-service:app
     ports:
       - ${PORT}:${PORT}
     depends_on:
@@ -23,7 +23,7 @@ services:
   postgres:
     container_name: nodejs2022Q2-service-postgres-db
     build: ./database/
-    image: oakov/nodejs2022q2-service-postgres-db
+    image: oakov/nodejs2022q2-service:postgres-db
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
     volumes:
@@ -36,6 +36,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-rest}
       PGDATA: /var/lib/postgresql/data
     restart: always
+    command: postgres -c logging_collector=on
 
 networks:
   postgres:

@@ -19,7 +19,7 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "scan:app": "docker scan oakov/nodejs2022q2-service-app",
+    "scan:app": "docker scan oakov/nodejs2022q2-service:app",
     "scan:db": "docker scan oakov/nodejs2022q2-service-postgres-db"
   },
   "dependencies": {

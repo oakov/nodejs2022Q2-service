@@ -10,19 +10,33 @@ git clone https://github.com/oakov/nodejs2022Q2-service
 
 ```
 cd nodejs2022Q2-service
-git checkout dev
+git checkout dev-docker
 npm i
 ```
 
 ## Running application
 
 ```
-npm start
+docker compose up --build
 ```
 
 After starting the app on port (4000 as default) you can open
 in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
 For more information about OpenAPI/Swagger please visit https://swagger.io/.
+
+App restarts after making changes to src folder.
+
+To scan the application image
+
+```
+npm run scan:app
+```
+
+To scan the database image
+
+```
+npm run scan:db
+```
 
 ## Testing
 
