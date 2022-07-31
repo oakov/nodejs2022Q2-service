@@ -10,7 +10,7 @@ git clone https://github.com/oakov/nodejs2022Q2-service
 
 ```
 cd nodejs2022Q2-service
-git checkout dev-docker
+git checkout dev-orm
 npm i
 ```
 
