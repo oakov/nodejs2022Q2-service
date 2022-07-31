@@ -8,7 +8,7 @@ RUN npm ci && npm cache clean --force
 
 COPY . .
 
-RUN npx prisma generate
+RUN npx prisma migrate dev && npx prisma generate
 
 EXPOSE ${PORT}
 

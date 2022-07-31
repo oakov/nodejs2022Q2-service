@@ -12,7 +12,7 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class UserService {
-  private users: IUser[] = [];
+  // private users: IUser[] = [];
   constructor(private prismaService: PrismaService) {}
 
   async getAll(): Promise<IUser[]> {
@@ -30,7 +30,7 @@ export class UserService {
   }
 
   async getById(id: string): Promise<IUser> {
-    return await this.prismaService.user.findUnique({
+    const user = await this.prismaService.user.findUnique({
       where: { id },
       select: {
         id: true,
@@ -41,6 +41,8 @@ export class UserService {
         version: true,
       },
     });
+    if (!user) throw new NotFoundException();
+    return user;
   }
 
   async create(userDto: CreateUserDto): Promise<Omit<IUser, 'password'>> {
@@ -74,12 +76,16 @@ export class UserService {
   }
 
   async remove(id: string): Promise<IUser> {
-    const deletedUser = await this.prismaService.user.delete({
-      where: {
-        id: id,
-      },
-    });
-    return deletedUser;
+    try {
+      const deletedUser = await this.prismaService.user.delete({
+        where: {
+          id: id,
+        },
+      });
+      return deletedUser;
+    } catch (e) {
+      throw new NotFoundException();
+    }
   }
 
   async update(
@@ -100,22 +106,29 @@ export class UserService {
     //   return responceUser;
     // }
     // throw new NotFoundException();
-    const updateUser: IUser = await this.prismaService.user.update({
-      where: {
-        id: id,
-      },
-      data: {
-        password: userDto.newPassword,
-        version: { increment: 1 },
-      },
-    });
+    if (userDto.oldPassword !== (await this.getById(id)).password)
+      throw new ForbiddenException();
+    try {
+      const updateUser: IUser = await this.prismaService.user.update({
+        where: {
+          id: id,
+        },
+        data: {
+          password: userDto.newPassword,
+          version: { increment: 1 },
+          updatedAt: Date.now(),
+        },
+      });
 
-    return {
-      id: updateUser.id,
-      login: updateUser.login,
-      version: updateUser.version,
-      createdAt: new Date(updateUser.createdAt).valueOf(),
-      updatedAt: new Date(updateUser.updatedAt).valueOf(),
-    };
+      return {
+        id: updateUser.id,
+        login: updateUser.login,
+        version: updateUser.version,
+        createdAt: new Date(updateUser.createdAt).valueOf(),
+        updatedAt: new Date(updateUser.updatedAt).valueOf(),
+      };
+    } catch (e) {
+      throw new NotFoundException();
+    }
   }
 }
