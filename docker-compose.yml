@@ -2,7 +2,7 @@ services:
   app:
     container_name: nodejs2022Q2-service-app
     build: .
-    image: oakov/nodejs2022q2-service:app
+    # image: oakov/nodejs2022q2-service:app
     ports:
       - ${PORT}:${PORT}
     depends_on:
