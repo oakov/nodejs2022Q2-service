@@ -6,9 +6,11 @@ import { readFile } from 'fs/promises';
 import { join } from 'path';
 import { parse } from 'yaml';
 import { ValidationPipe } from '@nestjs/common/pipes/validation.pipe';
+import { LoggerService } from './modules/logger/logger.service';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { bufferLogs: true });
+  app.useLogger(app.get(LoggerService));
   app.useGlobalPipes(new ValidationPipe());
 
   const fileAPI = await readFile(

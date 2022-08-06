@@ -8,8 +8,8 @@ RUN npm ci && npm cache clean --force
 
 COPY . .
 
-RUN npx prisma migrate dev && npx prisma generate
-
 EXPOSE ${PORT}
 
-CMD  ["npm", "run", "start:dev"]
+RUN npx prisma generate && npm run build
+
+CMD npx prisma migrate dev && npx prisma generate && npm run start:dev

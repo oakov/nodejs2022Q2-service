@@ -12,11 +12,9 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class UserService {
-  // private users: IUser[] = [];
   constructor(private prismaService: PrismaService) {}
 
   async getAll(): Promise<IUser[]> {
-    // return this.users;
     return this.prismaService.user.findMany({
       select: {
         id: true,
@@ -47,18 +45,6 @@ export class UserService {
 
   async create(userDto: CreateUserDto): Promise<Omit<IUser, 'password'>> {
     if (!userDto.login || !userDto.password) throw new BadRequestException();
-    // const createTime = Date.now();
-    // const newUser = {
-    //   id: uuidv4(),
-    //   ...userDto,
-    //   version: 1,
-    //   createdAt: createTime,
-    //   updatedAt: createTime,
-    // };
-    // this.users.push(newUser);
-    // const responseUser = { ...newUser };
-    // delete responseUser.password;
-    // return responseUser;
 
     const newUser = await this.prismaService.user.create({
       data: {
@@ -92,20 +78,6 @@ export class UserService {
     id: string,
     userDto: UpdatePasswordDto,
   ): Promise<Omit<IUser, 'password'>> {
-    // const userIndex = this.users.findIndex((user) => id === user.id);
-    // if (userIndex != -1) {
-    //   if (this.users[userIndex].password !== userDto.oldPassword)
-    //     throw new ForbiddenException('oldPassword is wrong');
-
-    //   this.users[userIndex].password = userDto.newPassword;
-    //   this.users[userIndex].version += 1;
-    //   this.users[userIndex].updatedAt = Date.now();
-
-    //   const responceUser: IUser = { ...this.users[userIndex] };
-    //   delete responceUser.password;
-    //   return responceUser;
-    // }
-    // throw new NotFoundException();
     if (userDto.oldPassword !== (await this.getById(id)).password)
       throw new ForbiddenException();
     try {

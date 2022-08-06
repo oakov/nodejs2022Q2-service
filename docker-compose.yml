@@ -10,6 +10,7 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
+      - logs:/app/logs
     networks:
       - postgres
     environment:
@@ -44,3 +45,4 @@ networks:
 
 volumes:
   postgres:
+  logs:
