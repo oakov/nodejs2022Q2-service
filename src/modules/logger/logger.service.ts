@@ -10,16 +10,25 @@ export const LOG_LEVELS = {
   4: ['log', 'error', 'warn', 'debug', 'verbose'],
 };
 
-const logger = (message, context, type) => {
+const logger = (message, context, type, stack?) => {
   const dir = join(__dirname, '../../../logs/');
   if (!existsSync(dir)) mkdirSync(dir);
-  const newLog = `[${type}][${context}] - ${message}\n`;
-  let logFile = join(dir, `/log-${LoggingService.lastLog}.txt`);
+  const newLog =
+    type === 'ERROR'
+      ? `[${type}][${message}] - ${stack}\n`
+      : `[${type}][${context}] - ${message}\n`;
+  let logFile = join(
+    dir,
+    `/log-${LoggingService.lastLog}${type === 'ERROR' ? '-ERR' : ''}.txt`,
+  );
   try {
     const { size } = statSync(logFile);
     if (size > 1024 * +process.env.LOGFILE_MAX_SIZE) {
       LoggingService.lastLog = Date.now();
-      logFile = join(dir, `/log-${LoggingService.lastLog}.txt`);
+      logFile = join(
+        dir,
+        `/log-${LoggingService.lastLog}${type === 'ERROR' ? '-ERR' : ''}.txt`,
+      );
     }
     writeFileSync(logFile, newLog, { flag: 'as' });
   } catch {
@@ -40,7 +49,7 @@ export class LoggingService extends ConsoleLogger {
     super.log(message, context);
   }
   error(message: any, stack?: string, context?: string) {
-    logger(message, context, 'ERROR');
+    logger(message, context, 'ERROR', stack);
     super.error(message, stack, context);
   }
   warn(message: any, context) {
