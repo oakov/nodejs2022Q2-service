@@ -14,15 +14,13 @@ const logger = (message, context, type) => {
   const dir = join(__dirname, '../../../logs/');
   if (!existsSync(dir)) mkdirSync(dir);
   const newLog = `[${type}][${context}] - ${message}\n`;
-  let logFile = join(dir, `/log-${LoggerService.lastLog}.txt`);
+  let logFile = join(dir, `/log-${LoggingService.lastLog}.txt`);
   try {
     const { size } = statSync(logFile);
-
-    if (size > +process.env.LOGFILE_MAX_SIZE) {
-      LoggerService.lastLog = Date.now();
-      logFile = join(dir, `/log-${LoggerService.lastLog}.txt`);
+    if (size > 1024 * +process.env.LOGFILE_MAX_SIZE) {
+      LoggingService.lastLog = Date.now();
+      logFile = join(dir, `/log-${LoggingService.lastLog}.txt`);
     }
-
     writeFileSync(logFile, newLog, { flag: 'as' });
   } catch {
     writeFileSync(logFile, newLog, { flag: 'as' });
@@ -30,7 +28,7 @@ const logger = (message, context, type) => {
 };
 
 @Injectable()
-export class LoggerService extends ConsoleLogger {
+export class LoggingService extends ConsoleLogger {
   constructor() {
     super();
     this.setLogLevels(LOG_LEVELS[process.env.LOG_LEVEL]);
