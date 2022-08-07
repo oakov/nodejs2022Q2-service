@@ -10,7 +10,7 @@ git clone https://github.com/oakov/nodejs2022Q2-service
 
 ```
 cd nodejs2022Q2-service
-git checkout dev-logging
+git checkout dev-auth
 npm i
 ```
 
@@ -38,14 +38,18 @@ To scan the database image
 npm run scan:db
 ```
 
+## Logging
+
+Volume "logs" contains log files.
+
 ## Testing
 
 After application running open new terminal and enter:
 
-To run all tests without authorization
+To run all tests
 
 ```
-npm run test
+npm run test:auth
 ```
 
 <!-- To run only one of all test suites
